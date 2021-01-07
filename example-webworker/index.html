@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <script src="./out.browser/rpc-common.js"></script>
+    <script src="./out.browser/rpc-browser.js"></script>
+    <script >
+        let rpc;
+        async function start() {
+            if (window.Worker) {
+                const myWorker = new Worker("worker.js");
+                rpc = new RpcBrowser(myWorker, myWorker);
+            }
+        }
+        async function add() {
+            const a = Number(document.getElementById("a").value);
+            const b = Number(document.getElementById("b").value);
+            const response = await rpc.invoke("add", [a, b]);
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerText = response;
+        }
+        start();
+    </script>
+
+</head>
+<body>
+    <form>
+        <input id="a" value="5"/>
+        <input id="b" value="7"/>
+        <input type="button" onclick="add()" value="Add">
+    </form>
+    <div id="result"></div>
+</body>
+</html>
